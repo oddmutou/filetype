@@ -4,7 +4,7 @@ use warnings;
 
 use IO::File;
 
-our $VERSION = "0.22";
+our $VERSION = "0.23";
 
 sub new {
   my $class = shift;
@@ -1483,6 +1483,14 @@ sub checktype_contents {
   if ($data =~ m[^BLENDER]) {
     return q{application/x-blender};
   }
+  if (length $data > 0) {
+    $substr = substr($data, 0, 4);
+    if (pack('H*', '1a45dfa3') eq $substr ) {
+      if ($data =~ pack('H*', '4282847765626d')) {
+        return q{video/webm};
+      }
+    }
+  }
 
   # autogerated code ends
 
@@ -1586,10 +1594,12 @@ can be found at L<http://cleancode.org/cgi-bin/viewcvs.cgi/email/mime-magic.mime
 =head1 AUTHOR
 
 Paul Mison <pmison@fotango.com>
+Nao Muto <n@o625.com>
 
 =head1 COPYRIGHT 
 
 Copyright 2003-2004 Fotango Ltd.
+Copyright 2017 Nao Muto
 
 =head1 LICENSE
 
